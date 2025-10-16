@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 灵感收集器 - 用户认证系统
 
-## Getting Started
+这个项目演示了在Next.js 15中实现用户认证系统的完整方案。
 
-First, run the development server:
+## 功能特性
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. 用户登录/注册
+2. 受保护的路由
+3. 用户状态管理
+4. 登出功能
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 技术栈
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js 15 (App Router)
+- NextAuth.js v5 (Auth.js)
+- TypeScript
+- Tailwind CSS
+- React Icons
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 快速开始
 
-## Learn More
+1. 安装依赖:
+   ```bash
+   npm install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. 运行开发服务器:
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. 打开浏览器访问 http://localhost:3000
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 认证系统说明
 
-## Deploy on Vercel
+### 核心文件
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `src/auth.ts` - NextAuth配置文件
+- `src/middleware.ts` - 路由保护中间件
+- `src/contexts/auth-context.tsx` - React上下文用于状态管理
+- `src/components/with-auth.tsx` - 高阶组件用于保护页面
+- `src/app/api/auth/[...nextauth]/route.ts` - NextAuth API路由
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 默认用户
+
+- 邮箱: admin@example.com
+- 密码: password123
+
+## 页面
+
+- `/` - 首页 (根据认证状态显示不同内容)
+- `/login` - 登录页面
+- `/register` - 注册页面
+- `/dashboard` - 受保护的仪表板页面
+- `/api/protected` - 受保护的API路由示例
+
+## 保护路由
+
+有两种方式保护路由:
+
+1. 使用中间件 (全局保护)
+2. 使用`withAuth`高阶组件 (页面级别保护)
+
+## 环境变量
+
+项目使用`.env.local`文件存储密钥:
+- `AUTH_SECRET` - NextAuth密钥
+
+## 扩展建议
+
+1. 连接真实数据库 (如MongoDB, PostgreSQL)
+2. 添加邮箱验证
+3. 实现密码重置功能
+4. 添加更多OAuth提供商 (Google, GitHub等)
+5. 实现角色和权限系统
