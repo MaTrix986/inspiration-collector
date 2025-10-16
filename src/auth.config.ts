@@ -38,6 +38,13 @@ export const authConfig = {
   },
   session: {
     strategy: "jwt",
+    // 设置会话过期时间（30天）
+    maxAge: 30 * 24 * 60 * 60,
+  },
+  // JWT 配置
+  jwt: {
+    // 设置 JWT 过期时间（30天）
+    maxAge: 30 * 24 * 60 * 60,
   },
   secret: process.env.AUTH_SECRET,
 } satisfies NextAuthConfig;

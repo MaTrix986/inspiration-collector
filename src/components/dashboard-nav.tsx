@@ -20,13 +20,23 @@ export default function DashboardNav() {
     { name: '我的灵感', href: '/dashboard/inspirations' },
   ];
 
+  // 改进路径匹配函数
+  const isActive = (href: string) => {
+    // 对于仪表板主页，精确匹配
+    if (href === '/dashboard') {
+      return pathname === '/dashboard';
+    }
+    // 对于其他路径，检查是否以该路径开头
+    return pathname.startsWith(href);
+  };
+
   // 桌面端导航
   const DesktopNav = () => (
     <div className="hidden md:flex space-x-2">
       {navItems.map((item) => (
         <Button
           key={item.name}
-          variant={pathname === item.href ? "default" : "ghost"}
+          variant={isActive(item.href) ? "default" : "ghost"}
           size="sm"
           className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary"
           asChild
@@ -44,12 +54,12 @@ export default function DashboardNav() {
     <div className="md:hidden">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="relative z-50">
             <Menu className="h-6 w-6" />
             <span className="sr-only">切换导航菜单</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left">
+        <SheetContent side="left" className="w-64">
           <SheetHeader>
             <SheetTitle>导航菜单</SheetTitle>
           </SheetHeader>
@@ -57,7 +67,7 @@ export default function DashboardNav() {
             {navItems.map((item) => (
               <Button
                 key={item.name}
-                variant={pathname === item.href ? "default" : "ghost"}
+                variant={isActive(item.href) ? "default" : "ghost"}
                 className="justify-start"
                 asChild
               >

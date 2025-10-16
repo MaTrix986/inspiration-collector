@@ -32,6 +32,33 @@ export default function EditInspirationPage({ params }: { params: { id: string }
     }
   };
 
+  const handleSave = async (updatedInspiration: any) => {
+    try {
+      const response = await fetch(`/api/inspirations/${params.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedInspiration),
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        // 保存成功后跳转到灵感列表页面
+        router.push('/dashboard/inspirations');
+        router.refresh();
+        return true;
+      } else {
+        console.error('保存失败:', result.error);
+        return false;
+      }
+    } catch (error) {
+      console.error('保存过程中发生错误:', error);
+      return false;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center py-12">
@@ -60,7 +87,7 @@ export default function EditInspirationPage({ params }: { params: { id: string }
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <InspirationForm initialData={inspiration} />
+          <InspirationForm inspiration={inspiration} onSave={handleSave} />
         </div>
       </div>
     </div>

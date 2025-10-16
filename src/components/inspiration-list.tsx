@@ -60,6 +60,8 @@ export default function InspirationList() {
       const response = await fetch(`/api/inspirations?${params.toString()}`);
       const data = await response.json();
       
+      console.log('API Response:', data); // 调试日志
+      
       if (data.success) {
         setInspirations(data.data.inspirations);
         // 提取所有唯一的标签和分类
@@ -72,7 +74,7 @@ export default function InspirationList() {
       }
     } catch (err) {
       setError('网络错误');
-      console.error(err);
+      console.error('Fetch error:', err);
     } finally {
       setLoading(false);
     }

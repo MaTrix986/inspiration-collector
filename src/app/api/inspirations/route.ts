@@ -14,6 +14,8 @@ import {
 export async function GET(request: Request) {
   const session = await auth();
   
+  console.log('Session in API route:', session); // 调试日志
+  
   if (!session) {
     return NextResponse.json({ error: "未认证" }, { status: 401 });
   }
@@ -28,6 +30,7 @@ export async function GET(request: Request) {
   const category = searchParams.get('category') || '';
   
   try {
+    console.log('Fetching inspirations for user:', session.user.id); // 调试日志
     const result = await getInspirations(
       session.user.id,
       page,
@@ -38,6 +41,8 @@ export async function GET(request: Request) {
       sortBy,
       sortOrder as 'asc' | 'desc'
     );
+    
+    console.log('Inspirations result:', result); // 调试日志
     
     return NextResponse.json({ 
       success: true,

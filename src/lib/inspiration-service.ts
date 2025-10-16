@@ -77,8 +77,17 @@ export async function getInspirations(
 ) {
   const { db } = await connectToDatabase();
   
-  // 构建查询条件
-  const query: any = { userId };
+  console.log('Querying inspirations for userId:', userId); // 调试日志
+  
+  // 构建查询条件 - 使用多种可能的ID格式进行查询
+  const query: any = {
+    $or: [
+      { userId: userId },
+      { userId: userId.toString() }
+    ]
+  };
+  
+  console.log('Query object:', query); // 调试日志
   
   // 搜索条件
   if (search) {
@@ -98,6 +107,8 @@ export async function getInspirations(
     query.category = category;
   }
   
+  console.log('Final query object:', query); // 调试日志
+  
   // 构建排序条件
   const sort: any = {};
   sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
@@ -111,14 +122,23 @@ export async function getInspirations(
     .limit(limit)
     .toArray();
   
+  console.log('Found inspirations:', inspirations); // 调试日志
+  
   // 获取总数
   const total = await db.collection('inspirations').countDocuments(query);
+  
+  console.log('Total inspirations:', total); // 调试日志
+  
+  // 同时查询所有灵感数据，用于调试
+  const allInspirations = await db.collection('inspirations').find({}).toArray();
+  console.log('All inspirations in DB:', allInspirations.length);
+  console.log('Sample of all inspirations:', allInspirations.slice(0, 3)); // 只显示前3个
   
   // 获取所有标签和分类（用于筛选）
   const tags = await db.collection('tags').find({}).toArray();
   const categories = await db.collection('categories').find({}).toArray();
   
-  return {
+  const result = {
     inspirations: inspirations.map(insp => ({
       ...insp,
       _id: insp._id.toString(),
@@ -134,6 +154,10 @@ export async function getInspirations(
       totalPages: Math.ceil(total / limit),
     },
   };
+  
+  console.log('Returning result:', result); // 调试日志
+  
+  return result;
 }
 
 // 获取单个灵感
